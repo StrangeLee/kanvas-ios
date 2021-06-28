@@ -213,6 +213,13 @@ final class EditorView: UIView, MovableViewCanvasDelegate, MediaPlayerViewDelega
             trailing: movableViewCanvas.trailingAnchor.constraint(equalTo: playerView?.trailingAnchor ?? trailingAnchor)
         )
     }()
+    
+    public func updateCustomConstraints(rectFrame: CGRect) {
+        drawingCanvas.widthAnchor.constraint(equalToConstant: rectFrame.width).isActive = true
+        drawingCanvas.heightAnchor.constraint(equalToConstant: rectFrame.height).isActive = true
+        movableViewCanvas.widthAnchor.constraint(equalToConstant: rectFrame.width).isActive = true
+        movableViewCanvas.heightAnchor.constraint(equalToConstant: rectFrame.height).isActive = true
+    }
 
     var avatarView: UIView? {
         return quickBlogSelectorCoordinator?.avatarView(frame: EditorViewConstants.frame)
@@ -331,6 +338,8 @@ final class EditorView: UIView, MovableViewCanvasDelegate, MediaPlayerViewDelega
         
         setupOverlay()
         setupOverlayLabel()
+        
+        self.bringSubviewToFront(drawingCanvas)
     }
 
     // MARK: - views
@@ -1136,6 +1145,7 @@ final class EditorView: UIView, MovableViewCanvasDelegate, MediaPlayerViewDelega
                 self.saveButton.alpha = show ? 1 : 0
             }
         }
+        self.postButton.isHidden = true
     }
     
     /// shows or hides the close button (back caret)

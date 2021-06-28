@@ -75,7 +75,7 @@ final class StickerCollectionCell: UICollectionViewCell {
     private func setUpView() {
         setUpMainView()
         setUpStickerView()
-        setUpLoadingView()
+//        setUpLoadingView()
     }
     
     /// Sets up the container that changes its color depending on whether the cell is selected or not

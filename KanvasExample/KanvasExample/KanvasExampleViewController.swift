@@ -150,6 +150,7 @@ final class KanvasExampleViewController: UIViewController {
         settings.features.multipleExports = false
         settings.features.scaleMediaToFill = false
         settings.features.muteButton = false
+        settings.aspectRatio = 1.77
         return settings
     }
 

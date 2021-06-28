@@ -341,9 +341,11 @@ final class MovableViewCanvas: IgnoreTouchesView, UIGestureRecognizerDelegate, M
             movableView.fadeOut()
             touchPosition = recognizer.touchLocations
             trashView.changeStatus(touchPosition)
+            self.bringSubviewToFront(trashView)
         case .changed:
             touchPosition = recognizer.touchLocations
             trashView.changeStatus(touchPosition)
+            self.bringSubviewToFront(trashView)
         case .ended, .cancelled, .failed:
             if trashView.contains(touchPosition) {
                 movableView.remove()

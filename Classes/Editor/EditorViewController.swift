@@ -215,6 +215,8 @@ public final class EditorViewController: UIViewController, MediaPlayerController
     public weak var delegate: EditorControllerDelegate?
 
     private var exportCompletion: ((Result<ExportResult, Error>) -> Void)?
+    
+    private var rectView: UIView = UIView()
 
     private static func editor(delegate: EditorViewDelegate?,
                                settings: CameraSettings,
@@ -408,8 +410,46 @@ public final class EditorViewController: UIViewController, MediaPlayerController
         super.viewDidLoad()
 
         view.backgroundColor = .black
+        player.playerView?.isHidden = true
+        
+        let standard = settings.aspectRatio == 1 ? view.frame.width - 40 : (view.frame.width - 40) * 1.77
+        let rectFrame = CGRect(x: 0, y: 0, width: view.frame.width - 40, height: standard)
+
+        rectView = UIView(frame: rectFrame)
+        rectView.backgroundColor = .clear
+
+        view.addSubview(rectView)
+
+        rectView.translatesAutoresizingMaskIntoConstraints = false
+        rectView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        rectView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        rectView.heightAnchor.constraint(equalToConstant: rectFrame.height).isActive = true
+        rectView.widthAnchor.constraint(equalToConstant: rectFrame.width).isActive = true
+        rectView.layer.borderWidth = 2
+        rectView.layer.borderColor = UIColor.gray.cgColor
+        rectView.isUserInteractionEnabled = false
+        
+        let image = self.segments.first?.image!
+        let imageView = StylableImageView(id: "main_image", image: image)
+        imageView.contentMode = .scaleAspectFit
+        
+        editorView.movableViewCanvas.addView(view: imageView, transformations: ViewTransformations(),
+                                             location: rectView.center, size: rectFrame.size, animated: false)
+        
         editorView.add(into: view)
+        editorView.updateCustomConstraints(rectFrame: rectFrame)
+        editorView.drawingCanvas.topAnchor.constraint(equalTo: rectView.topAnchor).isActive = true
+        editorView.drawingCanvas.bottomAnchor.constraint(equalTo: rectView.bottomAnchor).isActive = true
+        editorView.drawingCanvas.centerXAnchor.constraint(equalTo: rectView.centerXAnchor).isActive = true
+        editorView.drawingCanvas.centerYAnchor.constraint(equalTo: rectView.centerYAnchor).isActive = true
+        
+        editorView.movableViewCanvas.topAnchor.constraint(equalTo: rectView.topAnchor).isActive = true
+        editorView.movableViewCanvas.bottomAnchor.constraint(equalTo: rectView.bottomAnchor).isActive = true
+        editorView.movableViewCanvas.centerXAnchor.constraint(equalTo: rectView.centerXAnchor).isActive = true
+        editorView.movableViewCanvas.centerYAnchor.constraint(equalTo: rectView.centerYAnchor).isActive = true
+        
         drawingController.drawingLayer = editorView.drawingCanvas.layer
+        editorView.isUserInteractionEnabled = true
         
         load(childViewController: collectionController, into: editorView.collectionContainer)
         load(childViewController: filterController, into: editorView.filterMenuContainer)
@@ -437,11 +477,11 @@ public final class EditorViewController: UIViewController, MediaPlayerController
     
     /// Sets up the color carousels of both drawing and text tools
     private func addCarouselDefaultColors(_ image: UIImage) {
-        let dominantColors = image.getDominantColors(count: 3)
-        drawingController.addColorsForCarousel(colors: dominantColors)
+        let dominantColors = image.getDominantColors(count: 5)
+        drawingController.addColorsForCarousel(colors: [.white, .black, UIColor(hex: "#FFBC05"), UIColor(hex: "#2697FF"), UIColor(hex: "#423B34"), UIColor(hex: "#34C759"), UIColor(hex: "#FF3B30")]) // Drawing
 
         if let mostDominantColor = dominantColors.first {
-            textController.addColorsForCarousel(colors: [mostDominantColor, .white, .black])
+            textController.addColorsForCarousel(colors: [mostDominantColor, .white, .black, UIColor(hex: "#FFBC05"), UIColor(hex: "#2697FF"), UIColor(hex: "#423B34"), UIColor(hex: "#34C759"), UIColor(hex: "#FF3B30")]) // Text
         }
     }
 
@@ -763,7 +803,19 @@ public final class EditorViewController: UIViewController, MediaPlayerController
                 }
             }
             else {
-                createFinalImage(image: image, mediaInfo: firstSegment.mediaInfo, archive: archive, exportAction: action)
+                let canvasSize = CGSize(width: rectView.frame.size.width * 4, height: rectView.frame.size.height * 4)
+                                
+                UIGraphicsBeginImageContextWithOptions(canvasSize, false, 1.0)
+                self.rectView.layer.borderColor = UIColor.clear.cgColor
+                
+                UIColor.black.setFill()
+                let rect = CGRect(origin: .zero, size: canvasSize)
+                UIRectFill(rect)
+                                
+                let resultImage = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                
+                createFinalImage(image: resultImage!, mediaInfo: firstSegment.mediaInfo, archive: archive, exportAction: action)
             }
         }
         else if shouldExportMediaAsGIF {
@@ -912,12 +964,12 @@ public final class EditorViewController: UIViewController, MediaPlayerController
     private func imageOverlays() -> [CGImage] {
         editorView.layoutIfNeeded()
         var imageOverlays: [CGImage] = []
-        if let drawingLayer = drawingController.drawingLayer, let drawingOverlayImage = drawingLayer.cgImage() {
-            imageOverlays.append(drawingOverlayImage)
-        }
-        
         if let movableViewsOverlayImage = editorView.movableViewCanvas.layer.cgImage() {
             imageOverlays.append(movableViewsOverlayImage)
+        }
+        
+        if let drawingLayer = drawingController.drawingLayer, let drawingOverlayImage = drawingLayer.cgImage() {
+            imageOverlays.append(drawingOverlayImage)
         }
         return imageOverlays
     }
