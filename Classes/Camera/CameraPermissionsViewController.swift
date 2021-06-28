@@ -166,7 +166,7 @@ class CameraPermissionsView: UIView, CameraPermissionsViewable, MediaPickerButto
         addSubview(titleLabel)
         addSubview(descriptionLabel)
         addSubview(cameraAccessButton)
-        addSubview(microphoneAccessButton)
+//        addSubview(microphoneAccessButton)
         addSubview(mediaPickerButton)
 
         setupContainerView()
