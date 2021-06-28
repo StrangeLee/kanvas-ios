@@ -173,7 +173,7 @@ class CameraPermissionsView: UIView, CameraPermissionsViewable, MediaPickerButto
         setupTitleView()
         setupDescriptionView()
         setupCameraAccessButton()
-        setupMicrophoneAccessButton()
+//        setupMicrophoneAccessButton()
         setupMediaPickerButton()
     }
 
@@ -398,7 +398,7 @@ class CameraPermissionsViewController: UIViewController, CameraPermissionsViewDe
     }
 
     func hasFullAccess() -> Bool {
-        return hasCameraAccess() && hasMicrophoneAccess()
+        return hasCameraAccess()
     }
 
     private func hasCameraAccess() -> Bool {
@@ -413,14 +413,15 @@ class CameraPermissionsViewController: UIViewController, CameraPermissionsViewDe
     }
 
     private func hasMicrophoneAccess() -> Bool {
-        switch captureDeviceAuthorizer.authorizationStatus(for: .audio) {
-        case .notDetermined, .restricted, .denied:
-            return false
-        case .authorized:
-            return true
-        @unknown default:
-            return false
-        }
+//        switch captureDeviceAuthorizer.authorizationStatus(for: .audio) {
+//        case .notDetermined, .restricted, .denied:
+//            return false
+//        case .authorized:
+//            return true
+//        @unknown default:
+//            return false
+//        }
+        return true
     }
 
     private func openAppSettings() {
@@ -445,7 +446,7 @@ class CameraPermissionsViewController: UIViewController, CameraPermissionsViewDe
                 self.view = view
             }
             permissionsView?.updateCameraAccess(hasAccess: hasCameraAccess())
-            permissionsView?.updateMicrophoneAccess(hasAccess: hasMicrophoneAccess())
+//            permissionsView?.updateMicrophoneAccess(hasAccess: hasMicrophoneAccess())
         }
     }
 
