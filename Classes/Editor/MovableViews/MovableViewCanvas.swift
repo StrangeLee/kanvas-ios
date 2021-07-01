@@ -383,7 +383,7 @@ final class MovableViewCanvas: IgnoreTouchesView, UIGestureRecognizerDelegate, M
     
     func didTapImageView(movableView: MovableView, imageView: StylableImageView) {
         if let frontView = subviews.last, frontView != movableView {
-            bringSubviewToFront(movableView)
+//            bringSubviewToFront(movableView)
         }
         else if let stickerImage = imageView.image {
             imageView.image = stickerImage.withHorizontallyFlippedOrientation()
