@@ -431,7 +431,8 @@ public final class EditorViewController: UIViewController, MediaPlayerController
         
         let image = self.segments.first?.image!
         let imageView = StylableImageView(id: "main_image", image: image)
-        imageView.contentMode = .scaleAspectFit
+        imageView.viewSize = rectFrame.size
+        imageView.contentMode = .scaleAspectFill
         
         editorView.movableViewCanvas.addView(view: imageView, transformations: ViewTransformations(),
                                              location: rectView.center, size: rectFrame.size, animated: false)
