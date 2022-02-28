@@ -442,11 +442,13 @@ public final class EditorViewController: UIViewController, MediaPlayerController
         
         editorView.add(into: view)
         editorView.updateCustomConstraints(rectFrame: rectFrame)
+        editorView.drawingCanvas.translatesAutoresizingMaskIntoConstraints = false
         editorView.drawingCanvas.topAnchor.constraint(equalTo: rectView.topAnchor).isActive = true
         editorView.drawingCanvas.bottomAnchor.constraint(equalTo: rectView.bottomAnchor).isActive = true
         editorView.drawingCanvas.centerXAnchor.constraint(equalTo: rectView.centerXAnchor).isActive = true
         editorView.drawingCanvas.centerYAnchor.constraint(equalTo: rectView.centerYAnchor).isActive = true
         
+        editorView.movableViewCanvas.translatesAutoresizingMaskIntoConstraints = false
         editorView.movableViewCanvas.topAnchor.constraint(equalTo: rectView.topAnchor).isActive = true
         editorView.movableViewCanvas.bottomAnchor.constraint(equalTo: rectView.bottomAnchor).isActive = true
         editorView.movableViewCanvas.centerXAnchor.constraint(equalTo: rectView.centerXAnchor).isActive = true
