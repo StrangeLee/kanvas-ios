@@ -437,6 +437,7 @@ public final class EditorViewController: UIViewController, MediaPlayerController
         imageView.viewSize = rectFrame.size
         imageView.contentMode = .scaleAspectFill
         
+        editorView.translatesAutoresizingMaskIntoConstraints = false
         editorView.movableViewCanvas.addView(view: imageView, transformations: ViewTransformations(),
                                              location: rectView.center, size: rectFrame.size, animated: false)
         
