@@ -40,7 +40,7 @@ public struct KanvasStrings {
     }
 
     static func bundlePath(for aClass: AnyClass) -> String? {
-        return Bundle(for: aClass).path(forResource: "Kanvas", ofType: "bundle")
+        return Bundle(for: aClass).path(forResource: "Foodinko", ofType: "bundle")
     }
 
     public var cameraPermissionsTitleLabel: String
