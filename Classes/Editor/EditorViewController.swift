@@ -415,7 +415,7 @@ public final class EditorViewController: UIViewController, MediaPlayerController
         
         let standard = settings.aspectRatio == 1 ? view.frame.width - 90 : (view.frame.width - 60) * 1.77 + 10
         let rectFrame = CGRect(x: 0, y: 0, width: view.frame.width - 60, height: standard)
-
+        
         rectView = UIView(frame: rectFrame)
         rectView.backgroundColor = .clear
 
